@@ -72,6 +72,9 @@ const TimerComponent = () => {
   const [runTimer, setRunTimer] = useState(false);
   const [beepin, setBeepin] = useState(true);
 
+  // ADD a reset button
+  // FIX minutes go in steps of 2
+  
   useEffect(() => {
     const timer = setInterval(() => {
       if(runTimer) {
