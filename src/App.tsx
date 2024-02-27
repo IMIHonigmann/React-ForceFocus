@@ -1,8 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+let exportedTime = '';
+
 const TODOComponent = () => {
   const [todo, setTodo] = useState('');
   const [todoList, setTodoList] = useState([]);
+  const [todoTime, setTodoTime] = useState([]);
   const [indexToRemove, setIndexToRemove] = useState(-1);
   const [editModeIndex, setEditModeIndex] = useState(-1);
   const inputRef = useRef(null);
@@ -25,7 +28,8 @@ const TODOComponent = () => {
       />
 
       <button
-        onClick={ (editModeIndex !== -1 ? () => handleEdit(editModeIndex) : () => {todo === '' ? {} : setTodoList([...todoList, todo]); inputRef.current.select();}) }
+        onClick={ (editModeIndex !== -1 ? () => handleEdit(editModeIndex) : 
+          () => {todo === '' ? {} : setTodoList([...todoList, todo]); inputRef.current.select(); setTodoTime([...todoTime, exportedTime])}) }
       >
         {editModeIndex !== -1 ? 'Edit!' : 'Add to List'}
       </button>
@@ -37,6 +41,7 @@ const TODOComponent = () => {
         style={{ transitionDuration: '0.2s',
         ...(editModeIndex == index ? {color: 'red', marginLeft: '30px'} : {marginLeft: '10px'})
         }}>
+          
           <button
             onClick={() => { 
               setEditModeIndex(-1);
@@ -59,6 +64,10 @@ const TODOComponent = () => {
           <span style={{ transitionDuration: '0.4s', borderStyle: 'groove', borderRadius: '10px',  ...(editModeIndex == index ? {marginLeft: '10px', padding: '10px'} : {padding: '5px'}) }}>
             {' '} {index} {element}
           </span>
+          {' '}
+          <span style={{ transitionDuration: '0.4s', borderStyle: 'groove', borderRadius: '10px',  ...(editModeIndex == index ? {marginLeft: '2px', padding: '10px'} : {padding: '5px'}) }}>
+            {todoTime[index]}
+          </span>
         </p>
       ))}
     </>
@@ -71,6 +80,8 @@ const TimerComponent = () => {
   const [hrs, setHrs] = useState(0);
   const [runTimer, setRunTimer] = useState(false);
   const [beepin, setBeepin] = useState(true);
+
+  exportedTime = '' + hrs + ':' + mins + ':' + secs;
 
   // ADD a reset button
   // FIX minutes go in steps of 2
