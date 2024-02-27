@@ -86,27 +86,23 @@ const TimerComponent = () => {
 
   // ADD a reset button
   // ADD an element on enter button
-  // FIX minutes go in steps of 2
   
   useEffect(() => {
     const timer = setInterval(() => {
-      if(runTimer) {
-        setSecs(previousTime => {
-          if (previousTime === 59) {
-            setMins(previousMins => {
-              if(previousMins == 59) {
-                setHrs(previousHrs => previousHrs + 1)
-              }
-              return (previousMins + 1) % 60
-            });
+      if (runTimer) {
+        setSecs(previousSecs => (previousSecs + 1) % 60);
+        if (secs === 59) {
+          setMins(previousMins => (previousMins + 1) % 60);
+          if (mins === 59) {
+            setHrs(previousHrs => previousHrs + 1);
           }
-          return (previousTime + 1) % 60;
-        });
+        }
       }
     }, 1000);
-
+  
     return () => clearInterval(timer);
-  }, [runTimer]);
+  }, [mins, runTimer, secs]);
+  
 
   useEffect(() => {
     const beeper = setInterval(() => {
