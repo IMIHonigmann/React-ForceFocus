@@ -48,6 +48,7 @@ const TODOComponent = () => {
               setIndexToRemove(index);
               setTimeout(() => {
               setTodoList([...todoList.slice(0, index), ...todoList.slice(index + 1)]);
+              setTodoTime([...todoTime.slice(0, index), ...todoTime.slice(index + 1)]);
               setIndexToRemove(-1)
             }, 100);
               }
@@ -84,6 +85,7 @@ const TimerComponent = () => {
   exportedTime = '' + hrs + ':' + mins + ':' + secs;
 
   // ADD a reset button
+  // ADD an element on enter button
   // FIX minutes go in steps of 2
   
   useEffect(() => {
