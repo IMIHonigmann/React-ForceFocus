@@ -121,8 +121,18 @@ const TimerComponent = () => {
     </p>
     <p>
       <button
+      onClick={ () => {
+        setSecs(0);
+        setMins(0);
+        setHrs(0);
+        setRunTimer(false);
+      }}>
+        Reset
+      </button>
+      {' '}
+      <button
         onClick={() => setRunTimer(prev => !prev)}
-      > Start Timer!</button>
+      > {secs == 0 && mins == 0 && hrs == 0 ? 'Start Timer!' : runTimer ? 'Stop Timer' : 'Resume Timer'} </button>
     </p>
     </>
   )
