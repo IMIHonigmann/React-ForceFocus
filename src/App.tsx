@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import WarningComponent from './DeleteWarning';
 
 let exportedTime = '';
 
@@ -10,8 +11,8 @@ const TODOComponent = () => {
   const [editModeIndex, setEditModeIndex] = useState(-1);
   const inputRef = useRef(null);
 
-  const handleEdit = (indexToEdit) => {
-    let newTodoList = [...todoList];
+  const handleEdit = (indexToEdit: number) => {
+    const newTodoList = [...todoList];
     newTodoList[indexToEdit] = todo;
     setTodoList(newTodoList);
     setEditModeIndex(-1);
@@ -72,6 +73,16 @@ const TODOComponent = () => {
         }>
         {editModeIndex !== -1 ? 'Edit!' : 'Add to List'}
       </button>
+      {' '}
+      <button
+      onClick={() => {
+        setTodoList([]);
+        setTodoTime([]);
+        saveTodoListToLocalStorage(todoList, todoTime);
+        
+      }}>
+        Delete All
+      </button>
 
       {editModeIndex !== -1 && ' ' + editModeIndex}
 
@@ -109,6 +120,8 @@ const TODOComponent = () => {
           <span style={{ transitionDuration: '0.4s', borderStyle: 'groove', borderRadius: '10px',  ...(editModeIndex == index ? {marginLeft: '2px', padding: '10px'} : {padding: '5px'}) }}>
             {todoTime[index]}
           </span>
+
+
         </p>
       ))}
     </>
@@ -127,10 +140,10 @@ const TimerComponent = () => {
   // ADD a delete all button
   // ADD importing saved todoList when browser closes/refreshes BUGGED
   // ADD when the list is bigger than the screen it scrolls to the bottom
-  // ADD an element on enter button DONE
+  // ADD use commonancestors to make both warningcomponent and todocomponent have access to the todolist and so there can be a warning displayed
+    // ADD an animation to the displayed modal
   // FIX the browser not running the timer anymore when unfocused
-  // FIX journaled times are either constantly 0:0:0 or completely fucked
-  
+
   // ADD a countdown tab HARD
   
   useEffect(() => {
@@ -148,7 +161,7 @@ const TimerComponent = () => {
     }, 1000);
   
     return () => clearInterval(timer);
-  }, [mins, runTimer, secs]);
+  }, [hrs, mins, runTimer, secs]);
   
 
   useEffect(() => {
@@ -194,6 +207,7 @@ const RenderComponent = () => {
     <>
       {TimerComponent()}
       {TODOComponent()}
+      {WarningComponent()}
     </>
   ) 
 }
