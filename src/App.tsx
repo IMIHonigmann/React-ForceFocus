@@ -15,7 +15,39 @@ const TODOComponent = () => {
     newTodoList[indexToEdit] = todo;
     setTodoList(newTodoList);
     setEditModeIndex(-1);
+    saveTodoListToLocalStorage(newTodoList, todoTime); // working
   };
+
+  const handleAdd = (todoToAdd) => {
+    setTodoList([...todoList, todoToAdd]); 
+          inputRef.current.select(); 
+          setTodoTime([...todoTime, exportedTime]);
+          saveTodoListToLocalStorage(todoList, todoTime); // not working as expected for some reason (same issue like in the delete button)
+  }
+
+  const saveTodoListToLocalStorage  = (list: unknown, timeList) => {
+    localStorage.setItem('todoList', JSON.stringify(list));
+    localStorage.setItem('todoTimes', JSON.stringify(timeList));
+  };
+
+  useEffect(() => {
+    const importJSON = () => {
+      const storedTodoList = localStorage.getItem('todoList');
+      const storedTodoTimeList = localStorage.getItem('todoTimes');
+      if (storedTodoList && storedTodoTimeList) {
+        setTodoList(JSON.parse(storedTodoList));
+        setTodoTime(JSON.parse(storedTodoTimeList));
+      }
+    };
+    importJSON();
+  }, []);
+
+  // Still needs to be tested
+  const handleEnterClick = event => {
+    if(event.key === 'Enter') {
+      handleAdd(event.target.value);
+    }
+  }
   
   return (
     <>
@@ -25,12 +57,19 @@ const TODOComponent = () => {
         type='text'
         value={todo}
         onChange={e => setTodo(e.target.value)}
+        onKeyDown={handleEnterClick} // Still needs to be tested
       />
 
       <button
-        onClick={ (editModeIndex !== -1 ? () => handleEdit(editModeIndex) : 
-          () => {todo === '' ? {} : setTodoList([...todoList, todo]); inputRef.current.select(); setTodoTime([...todoTime, exportedTime])}) }
-      >
+        onClick={ (editModeIndex !== -1 ? () => {handleEdit(editModeIndex);} : 
+        // on both states the todo list gets saved. Kinda wierd bandaid fix
+        () => {todo === '' ? saveTodoListToLocalStorage(todoList, todoTime) : 
+          setTodoList([...todoList, todo]); 
+          inputRef.current.select(); 
+          setTodoTime([...todoTime, exportedTime]);
+          saveTodoListToLocalStorage(todoList, todoTime); // not working as expected for some reason (same issue like in the delete button)
+          }) 
+        }>
         {editModeIndex !== -1 ? 'Edit!' : 'Add to List'}
       </button>
 
@@ -47,11 +86,12 @@ const TODOComponent = () => {
               setEditModeIndex(-1);
               setIndexToRemove(index);
               setTimeout(() => {
-              setTodoList([...todoList.slice(0, index), ...todoList.slice(index + 1)]);
-              setTodoTime([...todoTime.slice(0, index), ...todoTime.slice(index + 1)]);
-              setIndexToRemove(-1)
+                setTodoList([...todoList.slice(0, index), ...todoList.slice(index + 1)]);
+                setTodoTime([...todoTime.slice(0, index), ...todoTime.slice(index + 1)]);
+                setIndexToRemove(-1);
+                saveTodoListToLocalStorage(todoList, todoTime); // not working as expected for some reason (last element gets ignored you see changes when you delete a min of 2 elements)
             }, 100);
-              }
+          }
             }
           >
             ✖
@@ -84,12 +124,19 @@ const TimerComponent = () => {
 
   exportedTime = '' + hrs + ':' + mins + ':' + secs;
 
-  // ADD a reset button
-  // ADD an element on enter button
+  // ADD a delete all button
+  // ADD importing saved todoList when browser closes/refreshes BUGGED
+  // ADD when the list is bigger than the screen it scrolls to the bottom
+  // ADD an element on enter button DONE
+  // FIX the browser not running the timer anymore when unfocused
+  // FIX journaled times are either constantly 0:0:0 or completely fucked
+  
+  // ADD a countdown tab HARD
   
   useEffect(() => {
     const timer = setInterval(() => {
       if (runTimer) {
+        document.title = `T: ${hrs}:${mins}:${secs}`;
         setSecs(previousSecs => (previousSecs + 1) % 60);
         if (secs === 59) {
           setMins(previousMins => (previousMins + 1) % 60);
@@ -114,9 +161,12 @@ const TimerComponent = () => {
     return () => clearInterval(beeper);
   }, [runTimer]);
 
+
+  // checking if secs == 0 && mins == 0 && hrs == 0 could be too intensive maybe remove it?
   return (
     <>
-    <p style={{fontSize: 100, margin: 30, display: 'flex', justifyContent: 'center', color: 'yellow'}} className={beepin || runTimer ? 'beep-in' : 'beep-out'}>
+    <title> {secs} </title>
+    <p style={{fontSize: 100, margin: 30, display: 'flex', justifyContent: 'center', color: 'yellow'}} className={beepin || runTimer || secs == 0 && mins == 0 && hrs == 0 ? 'beep-in' : 'beep-out'}>
       {hrs < 10 ? '0'+hrs : hrs}:{mins < 10 ? '0'+mins : mins}:{secs < 10 ? '0'+secs : secs}
     </p>
     <p>
@@ -126,6 +176,7 @@ const TimerComponent = () => {
         setMins(0);
         setHrs(0);
         setRunTimer(false);
+        document.title = `T: 0:0:0`
       }}>
         Reset
       </button>
