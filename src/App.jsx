@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import WarningComponent from './DeleteWarning';
 
 let exportedTime = '';
 
@@ -9,9 +8,53 @@ const TODOComponent = () => {
   const [todoTime, setTodoTime] = useState([]);
   const [indexToRemove, setIndexToRemove] = useState(-1);
   const [editModeIndex, setEditModeIndex] = useState(-1);
+  const [showWarning, setShowWarning] = useState(false);
   const inputRef = useRef(null);
 
-  const handleEdit = (indexToEdit: number) => {
+  const WarningComponent = () => {
+    const modalStyle = {
+        borderStyle: 'solid',
+        borderRadius: 20,
+        position: 'fixed',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        padding: '40px',
+        backgroundColor: '#fff',
+        transitionDuration: '0.4s',
+        fontSize: 15,
+    };
+    
+    return (
+        <>
+            <p style={modalStyle}>
+                Warning: This process cannot be undone
+                <p>
+                    <button
+                    onClick={() => {
+                      setTodoList([]);
+                      setTodoTime([]);
+                      setEditModeIndex(-1);
+                      saveTodoListToLocalStorage(todoList, todoTime);
+                      setShowWarning(false);
+                    }}
+                    >
+                        DELETE
+                    </button>
+                    <button
+                    onClick={() => {
+                      setShowWarning(false);
+                    }}>
+                        CANCEL
+                    </button>
+                </p>
+                
+            </p>
+        </>
+    );
+};
+
+  const handleEdit = (indexToEdit) => {
     const newTodoList = [...todoList];
     newTodoList[indexToEdit] = todo;
     setTodoList(newTodoList);
@@ -26,7 +69,7 @@ const TODOComponent = () => {
           saveTodoListToLocalStorage(todoList, todoTime); // not working as expected for some reason (same issue like in the delete button)
   }
 
-  const saveTodoListToLocalStorage  = (list: unknown, timeList) => {
+  const saveTodoListToLocalStorage  = (list, timeList) => {
     localStorage.setItem('todoList', JSON.stringify(list));
     localStorage.setItem('todoTimes', JSON.stringify(timeList));
   };
@@ -76,10 +119,7 @@ const TODOComponent = () => {
       {' '}
       <button
       onClick={() => {
-        setTodoList([]);
-        setTodoTime([]);
-        saveTodoListToLocalStorage(todoList, todoTime);
-        
+        setShowWarning(true);
       }}>
         Delete All
       </button>
@@ -121,9 +161,9 @@ const TODOComponent = () => {
             {todoTime[index]}
           </span>
 
-
         </p>
       ))}
+      {showWarning && WarningComponent()}
     </>
   );
 };
@@ -178,7 +218,6 @@ const TimerComponent = () => {
   // checking if secs == 0 && mins == 0 && hrs == 0 could be too intensive maybe remove it?
   return (
     <>
-    <title> {secs} </title>
     <p style={{fontSize: 100, margin: 30, display: 'flex', justifyContent: 'center', color: 'yellow'}} className={beepin || runTimer || secs == 0 && mins == 0 && hrs == 0 ? 'beep-in' : 'beep-out'}>
       {hrs < 10 ? '0'+hrs : hrs}:{mins < 10 ? '0'+mins : mins}:{secs < 10 ? '0'+secs : secs}
     </p>
@@ -207,7 +246,6 @@ const RenderComponent = () => {
     <>
       {TimerComponent()}
       {TODOComponent()}
-      {WarningComponent()}
     </>
   ) 
 }
