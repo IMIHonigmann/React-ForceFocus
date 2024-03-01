@@ -20,7 +20,7 @@ const TODOComponent = () => {
         left: '50%',
         transform: 'translate(-50%, -50%)',
         padding: '40px',
-        backgroundColor: '#fff',
+        backgroundColor: '#0F0D0D',
         transitionDuration: '0.4s',
         fontSize: 15,
     };
