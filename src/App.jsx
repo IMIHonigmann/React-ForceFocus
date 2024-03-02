@@ -241,9 +241,25 @@ const TimerComponent = () => {
   )
 };
 
+const Tabs = () => {
+  return (
+    <p className='tabs-container'>
+      <span>
+        Stopwatch
+      </span>
+      {' '}
+      <span>
+        Countdown
+      </span>
+    </p>
+  );
+};
+
+
 const RenderComponent = () => {
   return (
     <>
+      {Tabs()}
       {TimerComponent()}
       {TODOComponent()}
     </>

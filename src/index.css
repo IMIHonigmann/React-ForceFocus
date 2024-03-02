@@ -69,6 +69,27 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.tabs-container {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-left: 1vw;
+}
+
+.tabs-container span {
+  padding: 10px;
+  padding-inline: 20vw;
+  border: 1px solid #000;
+  transition-duration: 0.2s;
+}
+
+.tabs-container span:hover {
+  background-color: green;
+  transition-duration: 0.2s;
+}
+
 
 @media (prefers-color-scheme: light) {
   :root {
