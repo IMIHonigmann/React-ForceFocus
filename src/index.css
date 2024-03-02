@@ -76,18 +76,19 @@ button:focus-visible {
   align-items: center;
   gap: 20px;
   margin-left: 1vw;
+  padding-inline: '20vw'
 }
 
 .tabs-container span {
-  padding: 10px;
-  padding-inline: 20vw;
-  border: 1px solid #000;
   transition-duration: 0.2s;
+  padding: 10px;
+  border: 1px solid #000;
 }
 
 .tabs-container span:hover {
-  background-color: green;
   transition-duration: 0.2s;
+  background-color: green;
+  border-radius: 20px;
 }
 
 

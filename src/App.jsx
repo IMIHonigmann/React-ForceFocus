@@ -242,13 +242,19 @@ const TimerComponent = () => {
 };
 
 const Tabs = () => {
+  const [currentTab, setCurrentTab] = useState(0)
+
   return (
     <p className='tabs-container'>
-      <span>
+      <span
+      style={{ backgroundColor: (currentTab == 0 ? 'green' : ''), paddingInline: (currentTab == 0 ? '25vw' : '15vw')}}
+      onClick={() => setCurrentTab(0)}>
         Stopwatch
       </span>
       {' '}
-      <span>
+      <span
+      style={{ backgroundColor: (currentTab == 1 ? 'green' : ''), paddingInline: (currentTab == 1 ? '25vw' : '15vw')}}
+      onClick={() => setCurrentTab(1)}>
         Countdown
       </span>
     </p>
