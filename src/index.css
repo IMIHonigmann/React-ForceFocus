@@ -87,6 +87,7 @@ button:focus-visible {
 
 .tabs-container span:hover {
   transition-duration: 0.2s;
+  cursor: pointer;
   background-color: green;
   border-radius: 20px;
 }

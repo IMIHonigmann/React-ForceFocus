@@ -241,8 +241,8 @@ const TimerComponent = () => {
   )
 };
 
-const Tabs = () => {
-  const [currentTab, setCurrentTab] = useState(0)
+const Tabs = ({ currentTab, setCurrentTab }) => {
+  
 
   return (
     <p className='tabs-container'>
@@ -255,18 +255,93 @@ const Tabs = () => {
       <span
       style={{ backgroundColor: (currentTab == 1 ? 'green' : ''), paddingInline: (currentTab == 1 ? '25vw' : '15vw')}}
       onClick={() => setCurrentTab(1)}>
-        Countdown
+        CountdownWIP
       </span>
     </p>
   );
 };
 
+const CountdownComponent = () => {
+  const [secs, setSecs] = useState(59);
+  const [mins, setMins] = useState(59);
+  const [hrs, setHrs] = useState(59);
+  const [runTimer, setRunTimer] = useState(false);
+  const [beepin, setBeepin] = useState(true);
 
-const RenderComponent = () => {
+  exportedTime = '' + hrs + ':' + mins + ':' + secs;
+
+  // ADD a delete all button
+  // ADD importing saved todoList when browser closes/refreshes BUGGED
+  // ADD when the list is bigger than the screen it scrolls to the bottom
+  // ADD use commonancestors to make both warningcomponent and todocomponent have access to the todolist and so there can be a warning displayed
+    // ADD an animation to the displayed modal
+  // FIX the browser not running the timer anymore when unfocused
+
+  // ADD a countdown tab HARD
+  
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (runTimer && hrs != 0 && mins != 0 && secs != 0) {
+        document.title = `T: ${hrs}:${mins}:${secs}`;
+        setSecs(previousSecs => (previousSecs - 1 + 60) % 60);
+        if (secs === 0) {
+          setMins(previousMins => (previousMins - 1 + 60) % 60);
+          if (mins === 0) {
+            setHrs(previousHrs => (previousHrs - 1 + 60) % 60);
+          }
+        }
+      }
+    }, 1000);
+  
+    return () => clearInterval(timer);
+  }, [hrs, mins, runTimer, secs]);
+  
+
+  useEffect(() => {
+    const beeper = setInterval(() => {
+      if(!runTimer) {
+        setBeepin(prev => !prev)
+      }
+    }, 700);
+
+    return () => clearInterval(beeper);
+  }, [runTimer]);
+
+
+  // checking if secs == 0 && mins == 0 && hrs == 0 could be too intensive maybe remove it?
   return (
     <>
-      {Tabs()}
-      {TimerComponent()}
+    <p style={{fontSize: 100, margin: 30, display: 'flex', justifyContent: 'center', color: 'orange'}} className={beepin || runTimer || secs == 59 && mins == 59 && hrs == 59 ? 'beep-in' : 'beep-out'}>
+      {hrs < 10 ? '0'+hrs : hrs}:{mins < 10 ? '0'+mins : mins}:{secs < 10 ? '0'+secs : secs}
+    </p>
+    <p>
+      <button
+      onClick={ () => {
+        setSecs(0);
+        setMins(0);
+        setHrs(0);
+        setRunTimer(false);
+        document.title = `T: 0:0:0`
+      }}>
+        Reset
+      </button>
+      {' '}
+      <button
+        onClick={() => setRunTimer(prev => !prev)}
+      > {secs == 0 && mins == 0 && hrs == 0 ? 'Start Timer!' : runTimer ? 'Stop Timer' : 'Resume Timer'} </button>
+    </p>
+    </>
+  )
+};
+
+
+const RenderComponent = () => {
+  const [currentTab, setCurrentTab] = useState(0)
+
+  return (
+    <>
+      <Tabs currentTab={currentTab} setCurrentTab={setCurrentTab} />
+      {currentTab === 0 ? <TimerComponent /> : <CountdownComponent />}
       {TODOComponent()}
     </>
   ) 
