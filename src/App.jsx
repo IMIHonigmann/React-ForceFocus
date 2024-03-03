@@ -86,7 +86,6 @@ const TODOComponent = () => {
     importJSON();
   }, []);
 
-  // Still needs to be tested
   const handleEnterClick = event => {
     if(event.key === 'Enter') {
       handleAdd(event.target.value);
@@ -129,7 +128,8 @@ const TODOComponent = () => {
       {todoList.map((element, index) => (
         <p key={index} className={index == indexToRemove ? 'removeAnimation' : ''} 
         style={{ transitionDuration: '0.2s',
-        ...(editModeIndex == index ? {color: 'red', marginLeft: '30px'} : {marginLeft: '10px'})
+        ...(editModeIndex == index ? {color: 'red', marginLeft: '30px'} : {marginLeft: '10px'}),
+        borderStyle: 'solid'
         }}>
           
           <button
@@ -243,7 +243,6 @@ const TimerComponent = () => {
 
 const Tabs = ({ currentTab, setCurrentTab }) => {
   
-
   return (
     <p className='tabs-container'>
       <span
@@ -268,20 +267,13 @@ const CountdownComponent = () => {
   const [runTimer, setRunTimer] = useState(false);
   const [beepin, setBeepin] = useState(true);
 
+
+  // puts the times in the elements consider creating separate todolists for countdown and stopwatch
   exportedTime = '' + hrs + ':' + mins + ':' + secs;
-
-  // ADD a delete all button
-  // ADD importing saved todoList when browser closes/refreshes BUGGED
-  // ADD when the list is bigger than the screen it scrolls to the bottom
-  // ADD use commonancestors to make both warningcomponent and todocomponent have access to the todolist and so there can be a warning displayed
-    // ADD an animation to the displayed modal
-  // FIX the browser not running the timer anymore when unfocused
-
-  // ADD a countdown tab HARD
   
   useEffect(() => {
     const timer = setInterval(() => {
-      if (runTimer && hrs != 0 && mins != 0 && secs != 0) {
+      if (runTimer && (hrs != 0 || mins != 0 || secs != 0)) {
         document.title = `T: ${hrs}:${mins}:${secs}`;
         setSecs(previousSecs => (previousSecs - 1 + 60) % 60);
         if (secs === 0) {
