@@ -9,6 +9,7 @@ const TODOComponent = () => {
   const [indexToRemove, setIndexToRemove] = useState(-1);
   const [editModeIndex, setEditModeIndex] = useState(-1);
   const [showWarning, setShowWarning] = useState(false);
+  // const [newWindow, setNewWindow] = useState(null);
   const inputRef = useRef(null);
 
   const WarningComponent = () => {
@@ -126,9 +127,18 @@ const TODOComponent = () => {
       {editModeIndex !== -1 && ' ' + editModeIndex}
 
       {todoList.map((element, index) => (
-        <p key={index} className={'todoEntry ' + (index == indexToRemove ? 'removeAnimation' : '')} //
-        style={{ transitionDuration: '0.1s',
-        ...(editModeIndex == index ? {color: 'red', marginLeft: '30px'} : {}),
+        <p key={index} 
+        data-
+        onDoubleClick={() => {
+          setEditModeIndex(index);
+          inputRef.current.select();
+          setTodo(element);
+        }}
+        className={'todoEntry ' + (index == indexToRemove ? 'removeAnimation' : '')} //
+        style={{ 
+          transitionDuration: '0.15s',
+          cursor: 'pointer',
+        ...(editModeIndex == index ? {color: 'red', marginLeft: '30px', backgroundColor: '#201717', borderRadius: 25} : {}),
         border: '1px solid transparent',
         padding: 10,
         }}>
@@ -137,14 +147,15 @@ const TODOComponent = () => {
             onClick={() => { 
               setEditModeIndex(-1);
               setIndexToRemove(index);
+              // const openedWindow = window.open("", "_blank", "width=200,height=200");
+              // setNewWindow(openedWindow);
               setTimeout(() => {
                 setTodoList([...todoList.slice(0, index), ...todoList.slice(index + 1)]);
                 setTodoTime([...todoTime.slice(0, index), ...todoTime.slice(index + 1)]);
                 setIndexToRemove(-1);
                 saveTodoListToLocalStorage(todoList, todoTime); // not working as expected for some reason (last element gets ignored you see changes when you delete a min of 2 elements)
             }, 100);
-          }
-            }
+          }}
           >
             ✖
           </button>
@@ -154,7 +165,7 @@ const TODOComponent = () => {
             inputRef.current.select();
             setTodo(element);
           }}>🖋</button>
-          <span style={{ transitionDuration: '0.4s', borderStyle: 'groove', borderRadius: '10px',  ...(editModeIndex == index ? {marginLeft: '10px', padding: 10, paddingInline: 25} : {paddingInline: 20})}}>
+          <span style={{ transitionDuration: '0.4s', borderStyle: 'groove', borderRadius: '10px',  ...(editModeIndex == index ? {marginLeft: '10px', padding: 2, paddingInline: 25} : {paddingInline: 20})}}>
             {index}
           </span>
           {' '} 
@@ -305,28 +316,76 @@ const CountdownComponent = () => {
   }, [runTimer]);
 
 
+  const [editCountdown, setEditCountdown] = useState(true);
+  const digitInputStyle = {
+    width: 80, 
+    textAlign: 'center', 
+    fontSize: 60
+  };
+
   // checking if secs == 0 && mins == 0 && hrs == 0 could be too intensive maybe remove it?
   return (
     <>
-    <p style={{fontSize: 100, margin: 30, display: 'flex', justifyContent: 'center', color: 'orange'}} className={beepin || runTimer || secs == 59 && mins == 59 && hrs == 59 ? 'beep-in' : 'beep-out'}>
-      {hrs < 10 ? '0'+hrs : hrs}:{mins < 10 ? '0'+mins : mins}:{secs < 10 ? '0'+secs : secs}
-    </p>
-    <p>
-      <button
-      onClick={ () => {
-        setSecs(0);
-        setMins(0);
-        setHrs(0);
-        setRunTimer(false);
-        document.title = `T: 0:0:0`
-      }}>
-        Reset
-      </button>
-      {' '}
-      <button
-        onClick={() => setRunTimer(prev => !prev)}
-      > {secs == 0 && mins == 0 && hrs == 0 ? 'Start Timer!' : runTimer ? 'Stop Timer' : 'Resume Timer'} </button>
-    </p>
+      {editCountdown ?
+      <>
+      <br/>
+      <br/>
+      <br/>
+      {/* FIX the elements have way too much inline spacing */}
+      {/* STYLE TODO remove the input field styling so it seems like you can just edit the numbers  */}
+      {/* ADD give the user a hint that they can double click to edit a todo and the countdown */}
+      <div style={{display: 'grid', placeItems: 'center', gridTemplateColumns: 'repeat(5, auto)', fontSize: 50}}
+        onDoubleClick={() => {
+          setEditCountdown(false);
+        }}>
+        <input style={digitInputStyle}
+        type='text'
+        value={hrs}
+        maxLength='2'
+        onChange={e => setHrs(e.target.value)}
+        />
+        :
+        <input style={digitInputStyle}
+        type='text'
+        value={mins}
+        maxLength='2'
+        onChange={e => setMins(e.target.value)}
+        />
+        :
+        <input style={digitInputStyle}
+        type='text'
+        value={secs}
+        maxLength='2'
+        onChange={e => setSecs(e.target.value)}
+        />
+      </div>
+        <br/>
+        <br/>
+      </>
+      :
+      <p
+      style={{fontSize: 100, margin: 30, display: 'flex', justifyContent: 'center', color: 'orange', cursor: 'pointer'}} className={beepin || runTimer || secs == 59 && mins == 59 && hrs == 59 ? 'beep-in' : 'beep-out'}
+      onDoubleClick={() => setEditCountdown(true)}>
+        {hrs < 10 ? '0'+hrs : hrs}:{mins < 10 ? '0'+mins : mins}:{secs < 10 ? '0'+secs : secs}
+        <br/>
+      </p>
+    }
+      <p>
+        <button
+        onClick={ () => {
+          setSecs(0);
+          setMins(0);
+          setHrs(0);
+          setRunTimer(false);
+          document.title = `T: 0:0:0`
+        }}>
+          Reset
+        </button>
+        {' '}
+        <button
+          onClick={() => setRunTimer(prev => !prev)}
+        > {secs == 0 && mins == 0 && hrs == 0 ? 'Start Timer!' : runTimer ? 'Stop Timer' : 'Resume Timer'} </button>
+      </p>
     </>
   )
 };
