@@ -38,13 +38,6 @@ a:hover {
   transition: 0.7s ease-in-out;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
@@ -90,6 +83,13 @@ button:focus-visible {
   cursor: pointer;
   background-color: green;
   border-radius: 20px;
+}
+
+.todoEntry:hover{
+  border-style: inset;
+  border-radius: 20px;
+  border: 1px solid white;
+  background-color: rgb(0, 69, 0);
 }
 
 
