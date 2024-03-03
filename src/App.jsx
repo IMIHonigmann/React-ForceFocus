@@ -126,10 +126,11 @@ const TODOComponent = () => {
       {editModeIndex !== -1 && ' ' + editModeIndex}
 
       {todoList.map((element, index) => (
-        <p key={index} className={index == indexToRemove ? 'removeAnimation' : ''} 
+        <p key={index} className={'todoEntry ' + (index == indexToRemove ? 'removeAnimation' : '')} //
         style={{ transitionDuration: '0.2s',
         ...(editModeIndex == index ? {color: 'red', marginLeft: '30px'} : {marginLeft: '10px'}),
-        borderStyle: 'solid'
+        borderStyle: 'solid',
+        padding: 10,
         }}>
           
           <button
@@ -153,8 +154,12 @@ const TODOComponent = () => {
             inputRef.current.select();
             setTodo(element);
           }}>🖋</button>
+          <span style={{ transitionDuration: '0.4s', borderStyle: 'groove', borderRadius: '10px',  ...(editModeIndex == index ? {marginLeft: '10px', padding: '10px'} : {padding: '5px'}), paddingInline: 20 }}>
+            {index}
+          </span>
+          {' '} 
           <span style={{ transitionDuration: '0.4s', borderStyle: 'groove', borderRadius: '10px',  ...(editModeIndex == index ? {marginLeft: '10px', padding: '10px'} : {padding: '5px'}) }}>
-            {' '} {index} {element}
+            {element}
           </span>
           {' '}
           <span style={{ transitionDuration: '0.4s', borderStyle: 'groove', borderRadius: '10px',  ...(editModeIndex == index ? {marginLeft: '2px', padding: '10px'} : {padding: '5px'}) }}>
