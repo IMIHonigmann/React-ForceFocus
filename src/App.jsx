@@ -177,6 +177,30 @@ const TODOComponent = () => {
             {todoTime[index]}
           </span>
 
+          <span className='moveupdown'>
+            <button className='b1'
+            onClick={() => {
+              // FIX the time also needs to be moved
+              if (index <= 0) return;
+              const newTodoList = [...todoList];
+              const elementToMove = newTodoList.splice(index, 1)[0];
+              newTodoList.splice(index-1, 0, elementToMove);
+              setTodoList(newTodoList);
+            }}>
+              🔼
+            </button>
+            <button className='b2'
+            onClick={() => {
+              if (index == todoList.length -1) return;
+              const newTodoList = [...todoList];
+              const elementToMove = newTodoList.splice(index, 1)[0];
+              newTodoList.splice(index+2, 0, elementToMove);
+              setTodoList(newTodoList);
+            }}>
+              🔽
+            </button>
+          </span>
+
         </p>
       ))}
       {showWarning && WarningComponent()}

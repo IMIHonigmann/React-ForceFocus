@@ -92,6 +92,31 @@ button:focus-visible {
   background-color: rgb(0, 69, 0);
 }
 
+.moveupdown {
+  display: inline-block;
+  position: relative;
+  margin-left: 5px;
+}
+
+.moveupdown button {
+  position: absolute;
+  scale: 0.9;
+  padding: 5px;
+  background-color: transparent;
+}
+
+.b1 {
+  top: 0;
+  left: 0;
+  transform: translateY(-44px);
+}
+
+.b2 {
+  top: 0;
+  left: 0;
+  transform : translateY(-7px)
+}
+
 
 @media (prefers-color-scheme: light) {
   :root {
