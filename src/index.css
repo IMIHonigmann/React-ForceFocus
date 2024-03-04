@@ -117,6 +117,43 @@ button:focus-visible {
   transform : translateY(-7px)
 }
 
+.fadeupanim {
+  animation: fadeinoutup 0.4s ease-out forwards;
+}
+
+@keyframes fadeinoutup {
+  50% {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  60% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+.fadedownanim {
+  animation: fadeinoutdown 0.4s ease-out forwards;
+}
+
+@keyframes fadeinoutdown {
+  50% {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  60% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+
 
 @media (prefers-color-scheme: light) {
   :root {

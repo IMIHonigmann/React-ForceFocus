@@ -9,6 +9,7 @@ const TODOComponent = () => {
   const [indexToRemove, setIndexToRemove] = useState(-1);
   const [editModeIndex, setEditModeIndex] = useState(-1);
   const [showWarning, setShowWarning] = useState(false);
+  const pRefs = useRef([]);
   // const [newWindow, setNewWindow] = useState(null);
   const inputRef = useRef(null);
 
@@ -127,7 +128,7 @@ const TODOComponent = () => {
       {editModeIndex !== -1 && ' ' + editModeIndex}
 
       {todoList.map((element, index) => (
-        <p key={index} 
+        <p key={index} ref={(element) => (pRefs.current[index] = element)}
         data-
         onDoubleClick={() => {
           setEditModeIndex(index);
@@ -185,7 +186,15 @@ const TODOComponent = () => {
               const newTodoList = [...todoList];
               const elementToMove = newTodoList.splice(index, 1)[0];
               newTodoList.splice(index-1, 0, elementToMove);
-              setTodoList(newTodoList);
+              pRefs.current[index].classList.add('fadeupanim');
+              pRefs.current[index-1].classList.add('fadedownanim');
+              setTimeout(() => {
+                setTodoList(newTodoList);
+              }, 200);
+              setTimeout(() => {
+                pRefs.current[index].classList.remove('fadeupanim');
+                pRefs.current[index-1].classList.remove('fadedownanim');
+              }, 400);
             }}>
               🔼
             </button>
@@ -195,7 +204,15 @@ const TODOComponent = () => {
               const newTodoList = [...todoList];
               const elementToMove = newTodoList.splice(index, 1)[0];
               newTodoList.splice(index+2, 0, elementToMove);
-              setTodoList(newTodoList);
+              pRefs.current[index].classList.add('fadedownanim');
+              pRefs.current[index+1].classList.add('fadeupanim')
+              setTimeout(() => {
+                setTodoList(newTodoList);
+              }, 200);
+              setTimeout(() => {
+                pRefs.current[index].classList.remove('fadedownanim');
+                pRefs.current[index+1].classList.remove('fadeupanim');
+              }, 400);
             }}>
               🔽
             </button>
