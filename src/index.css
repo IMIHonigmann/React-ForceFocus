@@ -154,7 +154,7 @@ button:focus-visible {
 }
 
 .showWarning {
-  animation: showWarn 0.3s cubic-bezier(0.360, -0.600, 0.600, 1.000) forwards;
+  animation: showWarn 0.3s cubic-bezier(0.150, 0.440, 0.465, 1.350) forwards;
 }
 
 @keyframes showWarn {
@@ -183,7 +183,20 @@ button:focus-visible {
   }
 }
 
+.editableCountdown {
+  display: grid;
+  place-items: center;
+  grid-template-columns: 37.5% 7% 2% 7% 2% 7% 37.5%;
+  font-size: 90px;
+  border-radius: 20px;
+}
 
+
+@media screen and (max-width: 1300px) {
+  .editableCountdown {
+    grid-template-columns: repeat(7, auto);
+  }
+}
 
 @media (prefers-color-scheme: light) {
   :root {

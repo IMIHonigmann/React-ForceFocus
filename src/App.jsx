@@ -42,17 +42,17 @@ const TODOComponent = () => {
                       event.target.parentNode.parentNode.classList.add('removeWarning');
                       setTimeout(() => {
                         setShowWarning(false);
-                      }, 400);
+                      }, 300);
                     }}
                     >
                         DELETE
                     </button>
                     <button
                     onClick={(event) => {
+                      event.target.parentNode.parentNode.classList.add('removeWarning');
                       setTimeout(() => {
-                        event.target.parentNode.parentNode.classList.add('removeWarning');
                         setShowWarning(false);
-                      }, 400);
+                      }, 300);
                     }}>
                         CANCEL
                     </button>
@@ -347,9 +347,13 @@ const CountdownComponent = () => {
 
   const [editCountdown, setEditCountdown] = useState(true);
   const digitInputStyle = {
-    width: 80, 
+    width: 100, 
     textAlign: 'center', 
-    fontSize: 60
+    fontSize: 90,
+    backgroundColor: 'transparent',
+    borderRadius: 20,
+    // borderStyle: 'none',
+    // color: 'orange',
   };
 
   // checking if secs == 0 && mins == 0 && hrs == 0 could be too intensive maybe remove it?
@@ -359,14 +363,14 @@ const CountdownComponent = () => {
       <>
       <br/>
       <br/>
-      <br/>
       {/* FIX the elements have way too much inline spacing */}
       {/* STYLE TODO remove the input field styling so it seems like you can just edit the numbers  */}
       {/* ADD give the user a hint that they can double click to edit a todo and the countdown */}
-      <div style={{display: 'grid', placeItems: 'center', gridTemplateColumns: 'repeat(5, auto)', fontSize: 50}}
+      <div className='editableCountdown'
         onDoubleClick={() => {
           setEditCountdown(false);
         }}>
+        <span />
         <input style={digitInputStyle}
         type='text'
         value={hrs}
@@ -387,6 +391,7 @@ const CountdownComponent = () => {
         maxLength='2'
         onChange={e => setSecs(e.target.value)}
         />
+        <span />
       </div>
         <br/>
         <br/>
