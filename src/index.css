@@ -153,6 +153,36 @@ button:focus-visible {
   }
 }
 
+.showWarning {
+  animation: showWarn 0.3s cubic-bezier(0.360, -0.600, 0.600, 1.000) forwards;
+}
+
+@keyframes showWarn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 1;
+  }
+}
+
+.removeWarning {
+  animation: removeWarn 0.3s cubic-bezier(0.360, -0.600, 0.600, 1.000) forwards;
+}
+
+@keyframes removeWarn {
+  0% {
+    transform: scale(1.5);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
 
 
 @media (prefers-color-scheme: light) {

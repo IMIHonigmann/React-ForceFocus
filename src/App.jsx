@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import Tabs from "./Tabs.jsx";
 
 let exportedTime = '';
 
@@ -28,31 +29,37 @@ const TODOComponent = () => {
     };
     
     return (
-        <>
-            <p style={modalStyle}>
+        <div>
+            <p style={modalStyle} className='showWarning'>
                 Warning: This process cannot be undone
                 <p>
                     <button
-                    onClick={() => {
+                    onClick={(event) => {
                       setTodoList([]);
                       setTodoTime([]);
                       setEditModeIndex(-1);
                       saveTodoListToLocalStorage(todoList, todoTime);
-                      setShowWarning(false);
+                      event.target.parentNode.parentNode.classList.add('removeWarning');
+                      setTimeout(() => {
+                        setShowWarning(false);
+                      }, 400);
                     }}
                     >
                         DELETE
                     </button>
                     <button
-                    onClick={() => {
-                      setShowWarning(false);
+                    onClick={(event) => {
+                      setTimeout(() => {
+                        event.target.parentNode.parentNode.classList.add('removeWarning');
+                        setShowWarning(false);
+                      }, 400);
                     }}>
                         CANCEL
                     </button>
                 </p>
                 
             </p>
-        </>
+        </div>
     );
 };
 
@@ -296,25 +303,6 @@ const TimerComponent = () => {
     </p>
     </>
   )
-};
-
-const Tabs = ({ currentTab, setCurrentTab }) => {
-  
-  return (
-    <p className='tabs-container'>
-      <span
-      style={{ backgroundColor: (currentTab == 0 ? 'green' : ''), paddingInline: (currentTab == 0 ? '25vw' : '15vw')}}
-      onClick={() => setCurrentTab(0)}>
-        Stopwatch
-      </span>
-      {' '}
-      <span
-      style={{ backgroundColor: (currentTab == 1 ? 'green' : ''), paddingInline: (currentTab == 1 ? '25vw' : '15vw')}}
-      onClick={() => setCurrentTab(1)}>
-        CountdownWIP
-      </span>
-    </p>
-  );
 };
 
 const CountdownComponent = () => {
