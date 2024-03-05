@@ -2,7 +2,7 @@ import React from "react";
 
 const PomodoroComponent = ({ curPom, setCurPom}) => {
     const pomodoroAmount = 5;
-    const maxSize = 1900;
+    const maxSize = 1700;
     const cellSize = maxSize / pomodoroAmount;
     const biggerCellSize = cellSize * 2.5;
     const gridStyle = {

@@ -443,6 +443,7 @@ const RenderComponent = () => {
       <Tabs currentTab={currentTab} setCurrentTab={setCurrentTab} />
       {currentTab === 0 ? <TimerComponent /> : <CountdownComponent />}
       <PomodoroComponent curPom={curPom} setCurPom={setCurPom} />
+      <br/>
       <TODOComponent todoIndex={curPom} />
     </>
   ) 
