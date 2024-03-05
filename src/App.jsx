@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Tabs from "./Tabs.jsx";
+import PomodoroComponent from './Pomodoros.jsx';
 
 let exportedTime = '';
 
@@ -393,8 +394,6 @@ const CountdownComponent = () => {
         />
         <span />
       </div>
-        <br/>
-        <br/>
       </>
       :
       <p
@@ -432,6 +431,7 @@ const RenderComponent = () => {
     <>
       <Tabs currentTab={currentTab} setCurrentTab={setCurrentTab} />
       {currentTab === 0 ? <TimerComponent /> : <CountdownComponent />}
+      <PomodoroComponent />
       {TODOComponent()}
     </>
   ) 

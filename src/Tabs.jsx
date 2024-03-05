@@ -11,7 +11,7 @@ const Tabs = ({ currentTab, setCurrentTab }) => {
         </span>
         {' '}
         <span
-        style={{ backgroundColor: (currentTab == 1 ? 'green' : ''), paddingInline: (currentTab == 1 ? '25vw' : '15vw')}}
+        style={{ backgroundColor: (currentTab == 1 ? 'green' : ''), paddingInline: (currentTab == 1 ? '25vw' : '15vw'),}}
         onClick={() => setCurrentTab(1)}>
           CountdownWIP
         </span>
