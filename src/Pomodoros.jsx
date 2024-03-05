@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 
-const PomodoroComponent = () => {
+const PomodoroComponent = ({ curPom, setCurPom}) => {
     const pomodoroAmount = 5;
-    const [curPom, setCurPom] = useState(0);
     const maxSize = 1900;
     const cellSize = maxSize / pomodoroAmount;
     const biggerCellSize = cellSize * 2.5;

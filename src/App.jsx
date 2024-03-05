@@ -4,7 +4,7 @@ import PomodoroComponent from './Pomodoros.jsx';
 
 let exportedTime = '';
 
-const TODOComponent = () => {
+const TODOComponent = ({ todoIndex }) => {
   const [todo, setTodo] = useState('');
   const [todoList, setTodoList] = useState([]);
   const [todoTime, setTodoTime] = useState([]);
@@ -80,21 +80,22 @@ const TODOComponent = () => {
   }
 
   const saveTodoListToLocalStorage  = (list, timeList) => {
-    localStorage.setItem('todoList', JSON.stringify(list));
-    localStorage.setItem('todoTimes', JSON.stringify(timeList));
+    localStorage.setItem(`todoList${todoIndex}`, JSON.stringify(list));
+    localStorage.setItem(`todoTimes${todoIndex}`, JSON.stringify(timeList));
   };
 
   useEffect(() => {
     const importJSON = () => {
-      const storedTodoList = localStorage.getItem('todoList');
-      const storedTodoTimeList = localStorage.getItem('todoTimes');
+      const storedTodoList = localStorage.getItem(`todoList${todoIndex}`);
+      const storedTodoTimeList = localStorage.getItem(`todoTimes${todoIndex}`);
       if (storedTodoList && storedTodoTimeList) {
         setTodoList(JSON.parse(storedTodoList));
         setTodoTime(JSON.parse(storedTodoTimeList));
       }
     };
     importJSON();
-  }, []);
+    setEditModeIndex(-1);
+  }, [todoIndex]);
 
   const handleEnterClick = event => {
     if(event.key === 'Enter') {
@@ -132,8 +133,17 @@ const TODOComponent = () => {
       }}>
         Delete All
       </button>
+      {' '}
+      <button
+      onClick={() => {
+        saveTodoListToLocalStorage(todoList, todoTime);
+      }}>
+        Confirm Last Action
+      </button>
 
       {editModeIndex !== -1 && ' ' + editModeIndex}
+
+      <p>Hint: The last action will not be saved if you're sure you want to confirm it click: 'Confirm Last Action'</p>
 
       {todoList.map((element, index) => (
         <p key={index} ref={(element) => (pRefs.current[index] = element)}
@@ -425,14 +435,15 @@ const CountdownComponent = () => {
 
 
 const RenderComponent = () => {
-  const [currentTab, setCurrentTab] = useState(0)
+  const [currentTab, setCurrentTab] = useState(0);
+  const [curPom, setCurPom] = useState(0);
 
   return (
     <>
       <Tabs currentTab={currentTab} setCurrentTab={setCurrentTab} />
       {currentTab === 0 ? <TimerComponent /> : <CountdownComponent />}
-      <PomodoroComponent />
-      {TODOComponent()}
+      <PomodoroComponent curPom={curPom} setCurPom={setCurPom} />
+      <TODOComponent todoIndex={curPom} />
     </>
   ) 
 }
