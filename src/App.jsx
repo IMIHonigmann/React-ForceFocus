@@ -7,6 +7,7 @@ let exportedTime = '';
 const TODOComponent = ({ todoIndex }) => {
   const [todo, setTodo] = useState('');
   const [todoList, setTodoList] = useState([]);
+  const [doneTodoList, setDoneTodoList] = useState([]);
   const [todoTime, setTodoTime] = useState([]);
   const [indexToRemove, setIndexToRemove] = useState(-1);
   const [editModeIndex, setEditModeIndex] = useState(-1);
@@ -14,6 +15,12 @@ const TODOComponent = ({ todoIndex }) => {
   const pRefs = useRef([]);
   // const [newWindow, setNewWindow] = useState(null);
   const inputRef = useRef(null);
+  const generalTodoFieldStyles = {
+    transitionDuration: '0.4s', 
+    borderStyle: 'groove', 
+    borderRadius: '10px',
+    backgroundColor: '#242424'
+  }
 
   const WarningComponent = () => {
     const modalStyle = {
@@ -38,8 +45,9 @@ const TODOComponent = ({ todoIndex }) => {
                     onClick={(event) => {
                       setTodoList([]);
                       setTodoTime([]);
+                      setDoneTodoList([]);
                       setEditModeIndex(-1);
-                      saveTodoListToLocalStorage(todoList, todoTime);
+                      saveTodoListToLocalStorage([], [], []);
                       event.target.parentNode.parentNode.classList.add('removeWarning');
                       setTimeout(() => {
                         setShowWarning(false);
@@ -69,28 +77,41 @@ const TODOComponent = ({ todoIndex }) => {
     newTodoList[indexToEdit] = todo;
     setTodoList(newTodoList);
     setEditModeIndex(-1);
-    saveTodoListToLocalStorage(newTodoList, todoTime); // working
+    saveTodoListToLocalStorage(newTodoList, todoTime, doneTodoList);
   };
 
-  const handleAdd = (todoToAdd) => {
-    setTodoList([...todoList, todoToAdd]); 
-          inputRef.current.select(); 
-          setTodoTime([...todoTime, exportedTime]);
-          saveTodoListToLocalStorage(todoList, todoTime); // not working as expected for some reason (same issue like in the delete button)
+  const handleAdd = (todoToAdd) => { // a new todoTime isnt passed could be problematic
+    if(todoToAdd !== '') {
+      const newTodoList = [...todoList, todoToAdd];
+      const newTodoTime = [...todoTime, exportedTime]
+      setTodoList(newTodoList);
+      setTodoTime(newTodoTime);
+      saveTodoListToLocalStorage(newTodoList, newTodoTime, doneTodoList);
+    }
+      inputRef.current.select();
   }
 
-  const saveTodoListToLocalStorage  = (list, timeList) => {
+  const saveTodoListToLocalStorage = (list, timeList, doneList) => {
     localStorage.setItem(`todoList${todoIndex}`, JSON.stringify(list));
     localStorage.setItem(`todoTimes${todoIndex}`, JSON.stringify(timeList));
+    localStorage.setItem(`doneTodoList${todoIndex}`, JSON.stringify(doneList));
   };
+
+  // FIX the todo entries getting inserted for all lists on adding elements to the first list in the first time
+  // ADD a way to change the amount of pomodoros/pomodorolists
+    // CONSIDER: the todoJSONs are still on the local machine so you should delete them when the corresponding pomodoro gets removed
 
   useEffect(() => {
     const importJSON = () => {
       const storedTodoList = localStorage.getItem(`todoList${todoIndex}`);
       const storedTodoTimeList = localStorage.getItem(`todoTimes${todoIndex}`);
+      const storedDoneTodoList = localStorage.getItem(`doneTodoList${todoIndex}`);
       if (storedTodoList && storedTodoTimeList) {
         setTodoList(JSON.parse(storedTodoList));
         setTodoTime(JSON.parse(storedTodoTimeList));
+        if (storedDoneTodoList) {
+          setDoneTodoList(JSON.parse(storedDoneTodoList)); // FIX when switching the pomodorotab it deletes the donetodolist
+      }
       }
     };
     importJSON();
@@ -100,6 +121,7 @@ const TODOComponent = ({ todoIndex }) => {
   const handleEnterClick = event => {
     if(event.key === 'Enter') {
       handleAdd(event.target.value);
+      setEditModeIndex(-1);
     }
   }
   
@@ -116,14 +138,8 @@ const TODOComponent = ({ todoIndex }) => {
 
       <button
         onClick={ (editModeIndex !== -1 ? () => {handleEdit(editModeIndex);} : 
-        // on both states the todo list gets saved. Kinda wierd bandaid fix
-        () => {todo === '' ? saveTodoListToLocalStorage(todoList, todoTime) : 
-          setTodoList([...todoList, todo]); 
-          inputRef.current.select(); 
-          setTodoTime([...todoTime, exportedTime]);
-          saveTodoListToLocalStorage(todoList, todoTime); // not working as expected for some reason (same issue like in the delete button)
-          }) 
-        }>
+          () => handleAdd(todo)
+        )}>
         {editModeIndex !== -1 ? 'Edit!' : 'Add to List'}
       </button>
       {' '}
@@ -134,16 +150,8 @@ const TODOComponent = ({ todoIndex }) => {
         Delete All
       </button>
       {' '}
-      <button
-      onClick={() => {
-        saveTodoListToLocalStorage(todoList, todoTime);
-      }}>
-        Confirm Last Action
-      </button>
 
       {editModeIndex !== -1 && ' ' + editModeIndex}
-
-      <p>Hint: The last action will not be saved if you're sure you want to confirm it click: 'Confirm Last Action'</p>
 
       {todoList.map((element, index) => (
         <p key={index} ref={(element) => (pRefs.current[index] = element)}
@@ -166,13 +174,15 @@ const TODOComponent = ({ todoIndex }) => {
             onClick={() => { 
               setEditModeIndex(-1);
               setIndexToRemove(index);
+              const newTodoList = [...todoList.slice(0, index), ...todoList.slice(index + 1)];
+              const newTodotime = [...todoTime.slice(0, index), ...todoTime.slice(index + 1)];
               // const openedWindow = window.open("", "_blank", "width=200,height=200");
               // setNewWindow(openedWindow);
               setTimeout(() => {
-                setTodoList([...todoList.slice(0, index), ...todoList.slice(index + 1)]);
-                setTodoTime([...todoTime.slice(0, index), ...todoTime.slice(index + 1)]);
+                setTodoList(newTodoList);
+                setTodoTime(newTodotime);
                 setIndexToRemove(-1);
-                saveTodoListToLocalStorage(todoList, todoTime); // not working as expected for some reason (last element gets ignored you see changes when you delete a min of 2 elements)
+                saveTodoListToLocalStorage(newTodoList, newTodotime, doneTodoList);
             }, 100);
           }}
           >
@@ -184,15 +194,16 @@ const TODOComponent = ({ todoIndex }) => {
             inputRef.current.select();
             setTodo(element);
           }}>🖋</button>
-          <span style={{ transitionDuration: '0.4s', borderStyle: 'groove', borderRadius: '10px',  ...(editModeIndex == index ? {marginLeft: '10px', padding: 2, paddingInline: 25} : {paddingInline: 20})}}>
+          {' '}
+          <span style={{ ...generalTodoFieldStyles,  ...(editModeIndex == index ? {marginLeft: '10px', padding: 2, paddingInline: 25} : {paddingInline: 20})}}>
             {index}
           </span>
           {' '} 
-          <span style={{ transitionDuration: '0.4s', borderStyle: 'groove', borderRadius: '10px',  ...(editModeIndex == index ? {padding: '10px'} : {padding: '5px'}) }}>
+          <span style={{ ...generalTodoFieldStyles,  ...(editModeIndex == index ? {padding: '10px'} : {padding: '5px'}) }}>
             {element}
           </span>
           {' '}
-          <span style={{ transitionDuration: '0.4s', borderStyle: 'groove', borderRadius: '10px',  ...(editModeIndex == index ? {marginLeft: '2px', padding: '10px'} : {padding: '5px'}) }}>
+          <span style={{ ...generalTodoFieldStyles,  ...(editModeIndex == index ? {marginLeft: '2px', padding: '10px'} : {padding: '5px'}) }}>
             {todoTime[index]}
           </span>
 
@@ -235,7 +246,28 @@ const TODOComponent = ({ todoIndex }) => {
               🔽
             </button>
           </span>
+          <button style={{borderRadius: 50, marginLeft: 40, paddingInline: 15}}
+            onClick={() => { 
+              setEditModeIndex(-1);
+              setIndexToRemove(index);
+              const newTodoList = [...todoList.slice(0, index), ...todoList.slice(index + 1)];
+              const newTodoTime = [...todoTime.slice(0, index), ...todoTime.slice(index + 1)];
+              setTimeout(() => {
+                setTodoList(newTodoList);
+                setTodoTime(newTodoTime);
+                setDoneTodoList([...doneTodoList, element]); // hier // eventuell mit newDoneList implementieren
+                setIndexToRemove(-1);
+                saveTodoListToLocalStorage(newTodoList, newTodoTime, doneTodoList);
+            }, 100);
+          }}> 
+            ✓
+          </button>
 
+        </p>
+      ))}
+      {doneTodoList.map((element, /* index */) => (
+        <p style={{textDecoration: 'line-through'}}>
+          {element}
         </p>
       ))}
       {showWarning && WarningComponent()}
@@ -252,14 +284,10 @@ const TimerComponent = () => {
 
   exportedTime = '' + hrs + ':' + mins + ':' + secs;
 
-  // ADD a delete all button
   // ADD importing saved todoList when browser closes/refreshes BUGGED
   // ADD when the list is bigger than the screen it scrolls to the bottom
   // ADD use commonancestors to make both warningcomponent and todocomponent have access to the todolist and so there can be a warning displayed
-    // ADD an animation to the displayed modal
   // FIX the browser not running the timer anymore when unfocused
-
-  // ADD a countdown tab HARD
   
   useEffect(() => {
     const timer = setInterval(() => {
@@ -374,8 +402,6 @@ const CountdownComponent = () => {
       <>
       <br/>
       <br/>
-      {/* FIX the elements have way too much inline spacing */}
-      {/* STYLE TODO remove the input field styling so it seems like you can just edit the numbers  */}
       {/* ADD give the user a hint that they can double click to edit a todo and the countdown */}
       <div className='editableCountdown'
         onDoubleClick={() => {
