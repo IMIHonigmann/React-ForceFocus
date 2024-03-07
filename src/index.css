@@ -210,7 +210,7 @@ button:focus-visible {
 }
 
 
-@media screen and (max-width: 1300px) {
+@media screen and (max-width: 1400px) {
   .editableCountdown {
     grid-template-columns: repeat(7, auto);
   }

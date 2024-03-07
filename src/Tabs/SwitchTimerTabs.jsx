@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Tabs = ({ currentTab, setCurrentTab }) => {
+const SwitchTimerTabs = ({ currentTab, setCurrentTab }) => {
   
     return (
       <p className='tabs-container'>
@@ -19,4 +19,4 @@ const Tabs = ({ currentTab, setCurrentTab }) => {
     );
   };
 
-export default Tabs;
+export default SwitchTimerTabs;
