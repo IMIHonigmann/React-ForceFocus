@@ -209,6 +209,64 @@ button:focus-visible {
   padding-inline: 20px;
 }
 
+.showDoneList {
+  animation: comefromleft 0.4s forwards;
+}
+
+.hideDoneList {
+  animation: hidetoleft 0.4s forwards;
+}
+
+@keyframes comefromleft {
+  0% {
+    max-height: 0px;
+    opacity: 0;
+    transform: translate(-500px);
+  }
+  50% {
+    max-height: 2000px;
+    transform: translate(-500px);
+  }
+  100% {
+    transform: translate(0px);
+    opacity: 1;
+  }
+}
+
+@keyframes hidetoleft {
+  0% {
+    opacity: 1;
+    max-height: 2000px;
+    transform: translate(0px);
+  }
+  50% {
+    transform: translate(-500px);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-500px);
+    max-height: 0px;
+    opacity: 0;
+  }
+}
+
+.doneTodoList {
+  transition-duration: 0.2s;
+  padding: 10px;
+  border-style: solid;
+  max-width: 500px;
+  border-radius: 20px;
+  border-color: black;
+  background-color: black;
+  transform: translate(-100px);
+  padding-inline: 100px;
+}
+
+.doneTodoList:hover {
+  transition-duration: 0.2s;
+  transform: translate(-60px);
+  cursor: pointer;
+}
 
 @media screen and (max-width: 1400px) {
   .editableCountdown {

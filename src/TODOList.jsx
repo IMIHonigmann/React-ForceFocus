@@ -8,6 +8,7 @@ const TODOComponent = ({ todoIndex, combinedTime }) => {
     const [indexToRemove, setIndexToRemove] = useState(-1);
     const [editModeIndex, setEditModeIndex] = useState(-1);
     const [showWarning, setShowWarning] = useState(false);
+    const [showDoneList, setShowDoneList] = useState(true);
     const pRefs = useRef([]);
     // const [newWindow, setNewWindow] = useState(null);
     const inputRef = useRef(null);
@@ -149,7 +150,7 @@ const TODOComponent = ({ todoIndex, combinedTime }) => {
         {' '}
   
         {editModeIndex !== -1 && ' ' + editModeIndex}
-  
+        
         {todoList.map((element, index) => (
           <p key={index} ref={(element) => (pRefs.current[index] = element)}
           data-
@@ -249,12 +250,13 @@ const TODOComponent = ({ todoIndex, combinedTime }) => {
                 setIndexToRemove(index);
                 const newTodoList = [...todoList.slice(0, index), ...todoList.slice(index + 1)];
                 const newTodoTime = [...todoTime.slice(0, index), ...todoTime.slice(index + 1)];
+                const newDoneTodoList = [...doneTodoList, element]
                 setTimeout(() => {
                   setTodoList(newTodoList);
                   setTodoTime(newTodoTime);
-                  setDoneTodoList([...doneTodoList, element]); // hier // eventuell mit newDoneList implementieren
+                  setDoneTodoList(newDoneTodoList); // hier // eventuell mit newDoneList implementieren
                   setIndexToRemove(-1);
-                  saveTodoListToLocalStorage(newTodoList, newTodoTime, doneTodoList);
+                  saveTodoListToLocalStorage(newTodoList, newTodoTime, newDoneTodoList);
               }, 100);
             }}> 
               ✓
@@ -262,11 +264,21 @@ const TODOComponent = ({ todoIndex, combinedTime }) => {
   
           </p>
         ))}
-        {doneTodoList.map((element, /* index */) => (
-          <p style={{textDecoration: 'line-through'}}>
-            {element}
-          </p>
-        ))}
+        <br/>
+        <br/>
+        <div className='doneTodoList'
+        onClick={() => setShowDoneList(prev => !prev)}>
+          <div style={{marginLeft: 20}}>
+            <p className={showDoneList ? 'showDoneList' : 'hideDoneList'}>
+              {doneTodoList.map((element, /* index */) => (
+                <p style={{textDecoration: 'line-through'}}>
+                  {element}
+                </p>
+              ))}
+            </p>
+          </div>
+        </div>
+          {/* {showDoneList.toString()} */}
         {showWarning && WarningComponent()}
       </>
     );
