@@ -41,8 +41,9 @@ const StopWatchComponent = ({ secs, mins, hrs, setSecs, setMins, setHrs, combine
   
     // checking if secs == 0 && mins == 0 && hrs == 0 could be too intensive maybe remove it?
     return (
-      <>
-      <p style={{fontSize: 100, margin: 30, display: 'flex', justifyContent: 'center', color: 'yellow'}} className={beepin || runTimer || secs == 0 && mins == 0 && hrs == 0 ? 'beep-in' : 'beep-out'}>
+      <div className='openSWAnim'>
+      <p style={{fontSize: 100, margin: 30, display: 'flex', justifyContent: 'center', color: 'yellow'}} 
+      className={`${beepin || runTimer || secs === 0 && mins === 0 && hrs === 0 ? 'beep-in' : 'beep-out'}`}>
         {combinedTime}
       </p>
       <p>
@@ -61,7 +62,7 @@ const StopWatchComponent = ({ secs, mins, hrs, setSecs, setMins, setHrs, combine
           onClick={() => setRunTimer(prev => !prev)}
         > {secs == 0 && mins == 0 && hrs == 0 ? 'Start Timer!' : runTimer ? 'Stop Timer' : 'Resume Timer'} </button>
       </p>
-      </>
+      </div>
     )
   };
 

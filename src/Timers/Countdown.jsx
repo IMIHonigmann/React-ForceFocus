@@ -6,7 +6,7 @@ const CountdownComponent = ({ secs, hrs, mins, setSecs, setMins, setHrs, combine
 
     const [dHrs, setDHrs] = useState(0);
     const [dMins, setDMins] = useState(0);
-    const [dSecs, setDSecs] = useState(0);
+    const [dSecs, setDSecs] = useState(1);
   
   
     // puts the times in the elements consider creating separate todolists for countdown and stopwatch
@@ -61,7 +61,7 @@ const CountdownComponent = ({ secs, hrs, mins, setSecs, setMins, setHrs, combine
   
     // checking if secs == 0 && mins == 0 && hrs == 0 could be too intensive maybe remove it?
     return (
-      <>
+      <div className='openCTDAnim'>
         {editCountdown ?
         <>
         <br/>
@@ -117,6 +117,14 @@ const CountdownComponent = ({ secs, hrs, mins, setSecs, setMins, setHrs, combine
       }
         <p>
           <button
+          className={secs == dSecs && mins == dMins && hrs == dHrs ? 'ctdDefaultAnim' : 'disappearCTDDefaultAnim'}
+          onClick={() => {
+            setNewDefaultTime();
+          }}>
+            Set as default
+          </button>
+          {' '}
+          <button
           onClick={ () => {
             setHrs(dHrs);
             setMins(dMins);
@@ -131,15 +139,8 @@ const CountdownComponent = ({ secs, hrs, mins, setSecs, setMins, setHrs, combine
             onClick={() => setRunTimer(prev => !prev)}
           > {secs == dSecs && mins == dMins && hrs == dHrs ? 'Start Timer!' : runTimer ? 'Stop Timer' : 'Resume Timer'} </button>
           {' '}
-          <button
-          className={secs == dSecs && mins == dMins && hrs == dHrs ? 'ctdDefaultAnim' : 'disappearCTDDefaultAnim'}
-          onClick={() => {
-            setNewDefaultTime();
-          }}>
-            Set as default
-          </button>
         </p>
-      </>
+      </div>
     )
   };
 

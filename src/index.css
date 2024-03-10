@@ -73,14 +73,14 @@ button:focus-visible {
 }
 
 .tabs-container span {
-  transition-duration: 0.2s;
+  transition: 0.25s;
   padding: 10px;
   border: 1px solid #000;
   border-radius: 5px;
 }
 
 .tabs-container span:hover {
-  transition-duration: 0.2s;
+  transition-duration: 0.25s;
   cursor: pointer;
   background-color: green;
   border-radius: 20px;
@@ -283,17 +283,17 @@ button:focus-visible {
   }
   99% {
     opacity: 0;
-    transform: translateX(-80px)
+    transform: translateX(80px)
   }
   100% {
-    transform: translateX(-500px);
+    transform: translateX(500px);
   }
 }
 
 @keyframes disappearCTDDefaultAnim {
   0% {
     opacity: 0;
-    transform: translateX(-80px);
+    transform: translateX(80px);
   }
   100% {
     opacity: 1;
@@ -301,7 +301,36 @@ button:focus-visible {
   }
 }
 
+.openCTDAnim {
+  text-align: right;
+  animation: openCTDAnim 0.3s forwards;
+}
 
+@keyframes openCTDAnim {
+  0% {
+    transform: translateX(50px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0px);
+    opacity: 1;
+  }
+}
+
+.openSWAnim {
+  animation: openSWAnim 0.3s forwards;
+}
+
+@keyframes openSWAnim {
+  0% {
+    transform: translateX(-50px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0px);
+    opacity: 1;
+  }
+}
 
 @media screen and (max-width: 1400px) {
   .editableCountdown {
