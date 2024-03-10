@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 
-const TODOComponent = ({ todoIndex, combinedTime }) => {
-    const [todo, setTodo] = useState('');
+const TODOComponent = ({ todoIndex, combinedTime, todo, setTodo }) => {
     const [todoList, setTodoList] = useState([]);
     const [doneTodoList, setDoneTodoList] = useState([]);
     const [todoTime, setTodoTime] = useState([]);
@@ -126,6 +125,7 @@ const TODOComponent = ({ todoIndex, combinedTime }) => {
     return (
       <>
         <input
+          style={{paddingTop: 5, paddingBottom: 5, width: 500}}
           ref={inputRef}
           placeholder='Add to list...'
           type='text'
@@ -133,21 +133,21 @@ const TODOComponent = ({ todoIndex, combinedTime }) => {
           onChange={e => setTodo(e.target.value)}
           onKeyDown={handleEnterClick} // Still needs to be tested
         />
-  
+        <br/>
         <button
           onClick={ (editModeIndex !== -1 ? () => {handleEdit(editModeIndex);} : 
             () => handleAdd(todo)
           )}>
           {editModeIndex !== -1 ? 'Edit!' : 'Add to List'}
         </button>
-        {' '}
+        
         <button
         onClick={() => {
           setShowWarning(true);
         }}>
           Delete All
         </button>
-        {' '}
+        
   
         {editModeIndex !== -1 && ' ' + editModeIndex}
         
@@ -186,21 +186,21 @@ const TODOComponent = ({ todoIndex, combinedTime }) => {
             >
               ✖
             </button>
-            {' '}
+            
             <button onClick={() => {
               setEditModeIndex(index);
               inputRef.current.select();
               setTodo(element);
             }}>🖋</button>
-            {' '}
+            
             <span style={{ ...generalTodoFieldStyles,  ...(editModeIndex == index ? {marginLeft: '10px', padding: 2, paddingInline: 25} : {paddingInline: 20})}}>
               {index}
             </span>
-            {' '} 
+             
             <span style={{ ...generalTodoFieldStyles,  ...(editModeIndex == index ? {padding: '10px'} : {padding: '5px'}) }}>
               {element}
             </span>
-            {' '}
+            
             <span style={{ ...generalTodoFieldStyles,  ...(editModeIndex == index ? {marginLeft: '2px', padding: '10px'} : {padding: '5px'}) }}>
               {todoTime[index]}
             </span>

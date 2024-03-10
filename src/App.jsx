@@ -4,9 +4,11 @@ import PomodoroComponent from './Tabs/Pomodoros.jsx';
 import TODOComponent from './TODOList.jsx';
 import StopWatchComponent from './Timers/StopWatch.jsx';
 import CountdownComponent from './Timers/Countdown.jsx';
+import SpeechToText from './SpeechToText.jsx';
 
 
 const RenderComponent = () => {
+  const [todo, setTodo] = useState('');
   const [currentTab, setCurrentTab] = useState(0);
   const [curPom, setCurPom] = useState(0);
 
@@ -45,7 +47,10 @@ const RenderComponent = () => {
         }
       <PomodoroComponent curPom={curPom} setCurPom={setCurPom} />
       <br/>
-      <TODOComponent todoIndex={curPom} combinedTime={combinedTime} />
+      <br/>
+      <SpeechToText setTodo={setTodo} />
+      <br/>
+      <TODOComponent todoIndex={curPom} combinedTime={combinedTime} todo={todo} setTodo={setTodo} />
     </>
   ) 
 }
