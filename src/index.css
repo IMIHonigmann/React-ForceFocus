@@ -268,6 +268,41 @@ button:focus-visible {
   cursor: pointer;
 }
 
+.ctdDefaultAnim {
+  animation: ctdDefaultAnim 0.3s forwards;
+}
+
+.disappearCTDDefaultAnim {
+  animation: disappearCTDDefaultAnim 0.3s forwards;
+}
+
+@keyframes ctdDefaultAnim {
+
+  0% {
+    opacity: 1;
+  }
+  99% {
+    opacity: 0;
+    transform: translateX(-80px)
+  }
+  100% {
+    transform: translateX(-500px);
+  }
+}
+
+@keyframes disappearCTDDefaultAnim {
+  0% {
+    opacity: 0;
+    transform: translateX(-80px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
+
+
+
 @media screen and (max-width: 1400px) {
   .editableCountdown {
     grid-template-columns: repeat(7, auto);

@@ -3,6 +3,10 @@ import React, { useEffect, useState } from 'react';
 const CountdownComponent = ({ secs, hrs, mins, setSecs, setMins, setHrs, combinedTime }) => {
     const [runTimer, setRunTimer] = useState(false);
     const [beepin, setBeepin] = useState(true);
+
+    const [dHrs, setDHrs] = useState(0);
+    const [dMins, setDMins] = useState(0);
+    const [dSecs, setDSecs] = useState(0);
   
   
     // puts the times in the elements consider creating separate todolists for countdown and stopwatch
@@ -98,18 +102,29 @@ const CountdownComponent = ({ secs, hrs, mins, setSecs, setMins, setHrs, combine
         <p>
           <button
           onClick={ () => {
-            setSecs(0);
-            setMins(0);
-            setHrs(0);
+            setHrs(dHrs);
+            setMins(dMins);
+            setSecs(dSecs);
             setRunTimer(false);
-            document.title = `T: 0:0:0`
+            document.title = `T: ${combinedTime}`
           }}>
             Reset
           </button>
           {' '}
           <button
             onClick={() => setRunTimer(prev => !prev)}
-          > {secs == 0 && mins == 0 && hrs == 0 ? 'Start Timer!' : runTimer ? 'Stop Timer' : 'Resume Timer'} </button>
+          > {secs == dSecs && mins == dMins && hrs == dHrs ? 'Start Timer!' : runTimer ? 'Stop Timer' : 'Resume Timer'} </button>
+          {' '}
+          <button
+          className={secs == dSecs && mins == dMins && hrs == dHrs ? 'ctdDefaultAnim' : 'disappearCTDDefaultAnim'}
+          onClick={() => {
+            setDHrs(hrs);
+            setDMins(mins);
+            setDSecs(secs);
+            document.title = `T: ${combinedTime}`
+          }}>
+            Set as default
+          </button>
         </p>
       </>
     )
