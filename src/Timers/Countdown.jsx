@@ -51,6 +51,13 @@ const CountdownComponent = ({ secs, hrs, mins, setSecs, setMins, setHrs, combine
       // borderStyle: 'none',
       // color: 'orange',
     };
+
+    const setNewDefaultTime = () => {
+        setDHrs(hrs);
+        setDMins(mins);
+        setDSecs(secs);
+        document.title = `T: ${combinedTime}`;
+    }
   
     // checking if secs == 0 && mins == 0 && hrs == 0 could be too intensive maybe remove it?
     return (
@@ -69,7 +76,10 @@ const CountdownComponent = ({ secs, hrs, mins, setSecs, setMins, setHrs, combine
           type='number'
           value={hrs}
           maxLength={2}
-          onChange={e => setHrs(Math.abs(e.target.value))}
+          onChange={e => {
+            setHrs(Math.abs(e.target.value));
+            setNewDefaultTime();
+          }}
           onClick={event => event.target.select()}
           />
           :
@@ -77,7 +87,10 @@ const CountdownComponent = ({ secs, hrs, mins, setSecs, setMins, setHrs, combine
           type='number'
           value={mins}
           maxLength={2}
-          onChange={e => setMins(Math.abs(e.target.value))}
+          onChange={e => {
+            setMins(Math.abs(e.target.value));
+            setNewDefaultTime();
+          }}
           onClick={event => event.target.select()}
           />
           :
@@ -85,7 +98,10 @@ const CountdownComponent = ({ secs, hrs, mins, setSecs, setMins, setHrs, combine
           type='number'
           value={secs}
           maxLength={2}
-          onChange={e => setSecs(Math.abs(e.target.value))}
+          onChange={e => {
+            setSecs(Math.abs(e.target.value))
+            setNewDefaultTime();
+          }}
           onClick={event => event.target.select()}
           />
           <span />
@@ -118,10 +134,7 @@ const CountdownComponent = ({ secs, hrs, mins, setSecs, setMins, setHrs, combine
           <button
           className={secs == dSecs && mins == dMins && hrs == dHrs ? 'ctdDefaultAnim' : 'disappearCTDDefaultAnim'}
           onClick={() => {
-            setDHrs(hrs);
-            setDMins(mins);
-            setDSecs(secs);
-            document.title = `T: ${combinedTime}`
+            setNewDefaultTime();
           }}>
             Set as default
           </button>
