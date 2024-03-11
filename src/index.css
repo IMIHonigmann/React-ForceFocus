@@ -333,6 +333,37 @@ button:focus-visible {
   }
 }
 
+.fadefromright {
+  animation: fadefromright 0.3s forwards;
+}
+
+@keyframes fadefromright {
+  0% {
+    opacity: 0;
+    transform: translateX(-200px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
+
+.fadefromleft {
+  animation: fadefromleft 0.3s forwards;
+}
+
+@keyframes fadefromleft {
+  0% {
+    opacity: 0;
+    transform: translateX(200px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+  
+}
+
 @media screen and (max-width: 1400px) {
   .editableCountdown {
     grid-template-columns: repeat(7, auto);

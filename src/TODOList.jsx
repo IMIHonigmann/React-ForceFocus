@@ -17,6 +17,19 @@ const TODOComponent = ({ todoIndex, combinedTime, todo, setTodo }) => {
       borderRadius: '10px',
       backgroundColor: '#242424'
     }
+
+    const [lastTodoIndex, setLastTodoIndex] = useState(1);
+    const todoRef = useState(null);
+    useEffect(() => {
+      if(todoIndex < lastTodoIndex) {
+        todoRef.current.className = 'fadefromright';
+      }
+      else if(todoIndex > lastTodoIndex) {
+        todoRef.current.className = 'fadefromleft';
+      }
+      setLastTodoIndex(todoIndex);
+      setTimeout(() => todoRef.current.className = '', 400);
+    }, [todoRef, lastTodoIndex, todoIndex]);
   
     const WarningComponent = () => {
       const modalStyle = {
@@ -106,8 +119,7 @@ const TODOComponent = ({ todoIndex, combinedTime, todo, setTodo }) => {
           setTodoList(JSON.parse(storedTodoList));
           setTodoTime(JSON.parse(storedTodoTimeList));
           if (storedDoneTodoList) {
-            setDoneTodoList(JSON.parse(storedDoneTodoList)); // FIX when switching the pomodorotab it deletes the donetodolist
-            // REPRODUCTION: The same problem like the others last time where the last action/entry isn't being saved
+            setDoneTodoList(JSON.parse(storedDoneTodoList));
         }
         }
       };
@@ -123,7 +135,7 @@ const TODOComponent = ({ todoIndex, combinedTime, todo, setTodo }) => {
     }
     
     return (
-      <>
+      <div>
         <input
           style={{paddingTop: 5, paddingBottom: 5, width: 500}}
           ref={inputRef}
@@ -151,6 +163,7 @@ const TODOComponent = ({ todoIndex, combinedTime, todo, setTodo }) => {
   
         {editModeIndex !== -1 && ' ' + editModeIndex}
         
+        <div ref={todoRef}>
         {todoList.map((element, index) => (
           <p key={index} ref={(element) => (pRefs.current[index] = element)}
           data-
@@ -278,9 +291,10 @@ const TODOComponent = ({ todoIndex, combinedTime, todo, setTodo }) => {
             </p>
           </div>
         </div>
+        </div>
           {/* {showDoneList.toString()} */}
         {showWarning && WarningComponent()}
-      </>
+      </div>
     );
   };
 
